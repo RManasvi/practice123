@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R. Manasvi CMD</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+    }
+    .mac-window {
+      background: #2d2d2d;
+      border-radius: 10px;
+      max-width: 900px;
+      height: 600px;
+      margin: 2rem auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .mac-titlebar {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background-color: #3c3c3c;
+      height: 2rem;
+    }
+    .mac-buttons {
+      display: flex;
+      gap: 8px;
+      margin-left: 0.5rem;
+    }
+    .mac-button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .close { background: #ff5f57; }
+    .minimize { background: #ffbd2e; }
+    .maximize { background: #28c840; }
+    .terminal {
+      padding: 1rem;
+      white-space: pre-wrap;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+    .header {
+      color: #999;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .input-line {
+      display: flex;
+    }
+    .prompt {
+      margin-right: 8px;
+    }
+    .blinking-cursor {
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
+    }
+    input {
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font: inherit;
+      outline: none;
+      flex: 1;
+    }
+    .output-line {
+      white-space: pre-wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 900px) {
+      .mac-window {
+        max-width: 100%;
+        height: auto;
+        margin: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .mac-titlebar {
+        height: 1.5rem;
+      }
+      .mac-buttons {
+        gap: 5px;
+      }
+      .mac-button {
+        width: 10px;
+        height: 10px;
+      }
+      .terminal {
+        padding: 0.8rem;
+      }
+      .header {
+        font-size: 0.85rem;
+      }
+      .prompt {
+        font-size: 0.9rem;
+      }
+      input {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mac-window">
+    <div class="mac-titlebar">
+      <div class="mac-buttons">
+        <div class="mac-button close"></div>
+        <div class="mac-button minimize"></div>
+        <div class="mac-button maximize"></div>
+      </div>
+    </div>
+    <div class="terminal" id="terminal">
+      <div class="header">
+        Welcome to the personal CMD of R. Manasvi.<br>
+        Try typing commands like &lt;name&gt;, &lt;education&gt;, &lt;experience&gt;, or &lt;help&gt; to begin.
+      </div>
+      <div id="output"></div>
+      <div class="input-line">
+        <span class="prompt">user@manasvi:~$</span>
+        <input type="text" id="cmdInput" autofocus>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+    const input = document.getElementById('cmdInput');
+    const terminal = document.getElementById('terminal');
+
+    const commands = {
+      "<name>": `R. Manasvi`,
+      "<education>": `Bachelor of Technology in Computer Science\nABES Institute of Technology (2023 – Present)\nUttam School For Girls (Till 2023)`,
+      "<experience>": `1. Head of Digital Strategy and Growth, Microsoft Student Chapter ABESIT\n- Spearheaded digital strategies to increase engagement.\n- Designed innovative UI/UX solutions.\n\n2. UI/UX Designer Intern, Ideation X\n- Developed modern interfaces.\n- Collaborated with developers for integration.`,
+      "<certifications>": `- Diploma in Kathak\n- HackerRank Python (Basics) Certificate`,
+      "<extracurricular>": `- Diploma in Kathak\n- Attended "Shepreneur" Bootcamp by Dell\n- Participated in DevFest`,
+      "<hobbies>": `- Designing UI/UX\n- Public speaking\n- Learning new tech`,
+      "<help>": [
+        "Available commands:",
+        "<name>",
+        "<education>",
+        "<experience>",
+        "<certifications>",
+        "<extracurricular>",
+        "<hobbies>",
+        "<help>"
+      ].join("\n")
+    };
+
+    function escapeHTML(str) {
+      return str.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\n/g, "<br>");
+    }
+
+    function runCommand(cmd) {
+      const cleanCmd = cmd.trim();
+      const result = commands[cleanCmd] || `Command not found: ${cleanCmd}`;
+      output.innerHTML += `<div class='output-line'><span class='prompt'>user@manasvi:~$</span> ${escapeHTML(cleanCmd)}</div>`;
+      output.innerHTML += `<div class='output-line'>${escapeHTML(result)}</div>`;
+      input.value = "";
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        runCommand(input.value);
+      }
+    });
+  </script>
+</body>
+</html>
